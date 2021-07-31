@@ -9,16 +9,15 @@ module.exports = class Osu extends Plugin {
       usage: "{c} [username]",
       // send the user a message with the user stats
       executor: async (args) => {
-        console.log("thisworkjs");
         this.getUserStats(args.join(" "))
           .then((data) => {
-            console.log(data.body);
             return {
               send: true,
               result: `**${data.body.username}** has **${data.body.playcount}** plays and **${data.body.total_score}** score.`
             }
           })
           .catch((err) => {
+            console.log(err);
             return {
               send: false,
               result: `Error: ${err}`
