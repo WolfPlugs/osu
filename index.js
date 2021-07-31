@@ -19,11 +19,11 @@ module.exports = class Osu extends Plugin {
         }
         // string the stats
         const string = [
-          `__${body.username}'s Stats__\n`,
-          `Global Rank: **${body.formated_pp_rank}** (:flag_${body.country.toLowerCase()}: #${body.formated_pp_country_rank})\n`,
-          `PP: **${body.pp_raw}**\n`,
-          `Play Count: **${body.playcount}**\n`,
-          `Accuracy: **${body.short_accuracy}%**\n`,
+          `__${body.username}'s Stats__`,
+          `Global Rank: **${body.formated_pp_rank}** (:flag_${body.country.toLowerCase()}: #${body.formated_pp_country_rank})`,
+          `PP: **${body.pp_raw}**`,
+          `Play Count: **${body.playcount}**`,
+          `Accuracy: **${body.short_accuracy}%**`,
           `Time Played: **${body.time_played}**`,
       ].join('\n')
 
