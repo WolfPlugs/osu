@@ -1,4 +1,7 @@
 const { Plugin } = require("powercord/entities");
+const { getModule, channels } = require("powercord/webpack")
+const { createBotMessage } = getModule([ "createBotMessage" ], false)
+const { receiveMessage }   = getModule([ "receiveMessage" ], false)
 const { get } = require("powercord/http");
 
 module.exports = class Osu extends Plugin {
