@@ -8,16 +8,36 @@ module.exports = class Osu extends Plugin {
       description: "Get a user STATs from OSU",
       usage: "{c} [username]",
       // send the user a message with the user stats
-      execute: (args, channel) => {
-        this.getUserStats(args.join(" "))
-          .then((data) => {
-            channel.send(
-              `**${data.username}** has **${data.playcount}** plays and **${data.total_score}** score.`
-            );
-          })
-          .catch((err) => {
-            channel.send(`Error: ${err}`);
-          });
+      executor: async (args) => {
+        // get the user stats
+        try {
+        const { body } = await get(`https://api.obamabot.ml/text/osu?user=${args.join(" ")}`);
+        if(body.length === 0) {
+          return {
+            send: true, resutl:"No user found"
+          }
+        }
+        // string the stats
+        const string = [
+          `__${body.username}'s Stats__`,
+          `Global Rank: **${body.formated_pp_rank}** (:flag_${body.country.toLowerCase()}: #${body.formated_pp_country_rank})`,
+          `PP: **${body.pp_raw}**`,
+          `Play Count: **${body.playcount}**`,
+          `Accuracy: **${body.short_accuracy}%**`,
+          `Time Played: **${body.time_played}**`,
+      ].join('\n')
+
+        // send the user a message with the user stats
+        return {
+          send: true,
+          result: string,
+        }
+
+        } catch (e) {
+          return  {
+            send: true, result: `Error:  ${e}`
+          }
+        }        
       },
     });
   }
@@ -25,18 +45,5 @@ module.exports = class Osu extends Plugin {
   pluginWillUnload() {
     powercord.api.commands.unregisterCommand("osu");
   }
-  // function to fetch the user stats from osu
-  getUserStats(username) {
-    return get("https://api.obamabot.ml/text/osu", {
-      params: {
-        user: username,
-      },
-    })
-      .then((data) => {
-        return data;
-      })
-      .catch((err) => {
-        return err;
-      });
-  }
+  
 };
