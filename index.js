@@ -10,7 +10,13 @@ module.exports = class Osu extends Plugin {
       // send the user a message with the user stats
       executor: async (args) => {
         // get the user stats
+        try {
         const { body } = await get(`https://api.obamabot.ml/text/osu?user=${args.join(" ")}`);
+        if(body.length === 0) {
+          return {
+            send: true, resutl:"No user found"
+          }
+        }
         // string the stats
         const string = [
           `__${body.username}'s Stats__\n`,
@@ -26,6 +32,12 @@ module.exports = class Osu extends Plugin {
           send: true,
           result: string,
         }
+
+        } catch (e) {
+          return  {
+            send: true, result: `Error:  ${e}`
+          }
+        }        
       },
     });
   }
