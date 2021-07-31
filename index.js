@@ -9,20 +9,23 @@ module.exports = class Osu extends Plugin {
       usage: "{c} [username]",
       // send the user a message with the user stats
       executor: async (args) => {
-        this.getUserStats(args.join(" "))
-          .then((data) => {
-            return {
-              send: true,
-              result: `**${data.body.username}** has **${data.body.playcount}** plays and **${data.body.total_score}** score.`
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-            return {
-              send: false,
-              result: `Error: ${err}`
-            }
-          });
+        // get the user stats
+        const { body } = await get(`https://api.obamabot.ml/text/osu?user=${args.join(" ")}`);
+        // string the stats
+        const string = [
+          `__${body.username}'s Stats__\n`,
+          `Global Rank: **${body.formated_pp_rank}** (:flag_${body.country.toLowerCase()}: #${body.formated_pp_country_rank})\n`,
+          `PP: **${body.pp_raw}**\n`,
+          `Play Count: **${body.playcount}**\n`,
+          `Accuracy: **${body.short_accuracy}%**\n`,
+          `Time Played: **${body.time_played}**`,
+      ].join('\n')
+
+        // send the user a message with the user stats
+        return {
+          send: true,
+          result: string,
+        }
       },
     });
   }
@@ -30,14 +33,5 @@ module.exports = class Osu extends Plugin {
   pluginWillUnload() {
     powercord.api.commands.unregisterCommand("osu");
   }
-  // function to fetch the user stats from osu
-  async getUserStats(username) {
-    return await get(`https://api.obamabot.ml/text/osu?user=${username}`)
-      .then((data) => {
-        return data;
-      })
-      .catch((err) => {
-        return err;
-      });
-  }
+  
 };
