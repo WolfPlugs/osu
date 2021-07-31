@@ -14,7 +14,7 @@ module.exports = class Osu extends Plugin {
         const { body } = await get(`https://api.obamabot.ml/text/osu?user=${args.join(" ")}`);
         if(body.length === 0) {
           return {
-            send: true, resutl:"No user found"
+            send: true, result:"No user found"
           }
         }
         // string the stats
