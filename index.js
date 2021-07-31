@@ -1,17 +1,7 @@
 const { Plugin } = require("powercord/entities");
-const { getModule, channels } = require("powercord/webpack")
-const { createBotMessage } = getModule([ "createBotMessage" ], false)
-const { receiveMessage }   = getModule([ "receiveMessage" ], false)
 const { get } = require("powercord/http");
 
 module.exports = class Osu extends Plugin {
-
-  async sendBotMessage(content) {
-    const received = createBotMessage(channels.getChannelId(), content)
-    received.author.username = "Error Daddy"
-    return receiveMessage(received.channel_id, received)
-}
-
   startPlugin() {
     powercord.api.commands.registerCommand({
       command: "osu",
@@ -24,8 +14,12 @@ module.exports = class Osu extends Plugin {
             `https://api.obamabot.ml/text/osu?user=${args.join(" ")}`
           );
           if (body.length === 0) {
-            this.sendBotMessage("No user found");
-            return
+            
+            return {
+              result: "No user found",
+              username: "Pippi",
+              avatar_url: "https://i.imgur.com/eRTuzdt.png"
+            }
           }
           // string the stats
           const string = [
@@ -47,8 +41,11 @@ module.exports = class Osu extends Plugin {
             result: string,
           };
         } catch (e) {
-          this.sendBotMessage(e.message);
-          return
+          return {
+            result: `Error: ${e}`,
+            username: "Pippi",
+            avatar_url: "https://i.imgur.com/eRTuzdt.png",
+          };
         }
       },
     });
