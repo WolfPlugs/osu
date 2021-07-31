@@ -6,5 +6,5 @@ stats
 
 recent plays will be made soon hopefully
 ```
-{c} [username]
+{prefix}osu [username]
 ```
