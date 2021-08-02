@@ -16,6 +16,7 @@ module.exports = class Osu extends Plugin {
           if (body.length === 0) {
             
             return {
+              send: false,
               result: "No user found",
               username: "Pippi",
               avatar_url: "https://i.imgur.com/eRTuzdt.png"
@@ -37,11 +38,12 @@ module.exports = class Osu extends Plugin {
 
           // send the user a message with the user stats
           return {
-            send: true,
+            send: false,
             result: string,
           };
         } catch (e) {
           return {
+            send: false, 
             result: `Error: ${e}`,
             username: "Pippi",
             avatar_url: "https://i.imgur.com/eRTuzdt.png",
