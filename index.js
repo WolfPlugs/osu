@@ -11,7 +11,7 @@ module.exports = class Osu extends Plugin {
         // get the user stats
         try {
           const { body } = await get(
-            `https://api.obamabot.ml/text/osu?user=${args.join(" ")}`
+            `https://api.obamabot.ml/v1/text/osu?user=${args.join(" ")}`
           );
           if (body.length === 0) {
             
