@@ -26,7 +26,7 @@ module.exports = class Osu extends Plugin {
             `__${body.username}'s Stats__`,
             `Global Rank: **${
               body.formated_pp_rank
-            }** (:flag_${body.country}: #${
+            }** (:flag_${body.country}`.toLowerCase()`: #${
               body.formated_pp_country_rank
             })`,
             `PP: **${body.pp_raw}**`,

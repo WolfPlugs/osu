@@ -37,7 +37,7 @@ module.exports = class Osu extends Plugin {
 
           // send the user a message with the user stats
           return {
-            send: false,
+            send: true,
             result: string,
           };
         } catch (e) {

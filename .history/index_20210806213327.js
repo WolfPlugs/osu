@@ -11,7 +11,7 @@ module.exports = class Osu extends Plugin {
         // get the user stats
         try {
           const { body } = await get(
-            `https://api.obamabot.ml/v2/text/osu?user=${args.join(" ")}`
+            `${args.join(" ")}`
           );
           if (body.length === 0) {
             
@@ -26,7 +26,7 @@ module.exports = class Osu extends Plugin {
             `__${body.username}'s Stats__`,
             `Global Rank: **${
               body.formated_pp_rank
-            }** (:flag_${body.country}: #${
+            }** (:flag_${body.country.toLowerCase()}: #${
               body.formated_pp_country_rank
             })`,
             `PP: **${body.pp_raw}**`,
@@ -37,7 +37,7 @@ module.exports = class Osu extends Plugin {
 
           // send the user a message with the user stats
           return {
-            send: false,
+            send: true,
             result: string,
           };
         } catch (e) {
@@ -51,5 +51,7 @@ module.exports = class Osu extends Plugin {
     });
   }
 
-  pluginWillUnload() {powercord.api.commands.unregisterCommand("osu");}
+  pluginWillUnload() {
+    powercord.api.commands.unregisterCommand("osu");
+  }
 };

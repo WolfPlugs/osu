@@ -37,7 +37,7 @@ module.exports = class Osu extends Plugin {
 
           // send the user a message with the user stats
           return {
-            send: false,
+            send: true,
             result: string,
           };
         } catch (e) {
@@ -51,5 +51,7 @@ module.exports = class Osu extends Plugin {
     });
   }
 
-  pluginWillUnload() {powercord.api.commands.unregisterCommand("osu");}
+  pluginWillUnload() {
+    powercord.api.commands.unregisterCommand("osu");
+  }
 };
