@@ -1,17 +1,7 @@
 const { Plugin } = require("powercord/entities");
-const { getModule, channels } = require("powercord/webpack")
-const { createBotMessage } = getModule([ "createBotMessage" ], false)
-const { receiveMessage }   = getModule([ "receiveMessage" ], false)
 const { get } = require("powercord/http");
 
 module.exports = class Osu extends Plugin {
-
-  async sendBotMessage(content) {
-    const received = createBotMessage(channels.getChannelId(), content)
-    received.author.username = "Error Daddy"
-    return receiveMessage(received.channel_id, received)
-}
-
   startPlugin() {
     powercord.api.commands.registerCommand({
       command: "osu",
@@ -21,40 +11,49 @@ module.exports = class Osu extends Plugin {
         // get the user stats
         try {
           const { body } = await get(
-            `https://api.obamabot.ml/text/osu?user=${args.join(" ")}`
+            `https://api.obamabot.cf/v2/text/osu?user=${args.join(" ")}`
           );
+		  console.log(body)
           if (body.length === 0) {
-            this.sendBotMessage("No user found");
-            return
+            
+            return {
+              result: "No user found",
+              username: "Pippi",
+              avatar_url: "https://i.imgur.com/eRTuzdt.png"
+            }
           }
           // string the stats
           const string = [
             `__${body.username}'s Stats__`,
             `Global Rank: **${
-              body.formated_pp_rank
-            }** (:flag_${body.country.toLowerCase()}: #${
-              body.formated_pp_country_rank
+              body.custom[0].pp_rank
+            }** (:flag_${body.custom[0].country_code}: #${
+              body.custom[0].pp_country_rank
             })`,
-            `PP: **${body.pp_raw}**`,
-            `Play Count: **${body.playcount}**`,
-            `Accuracy: **${body.short_accuracy}%**`,
-            `Time Played: **${body.time_played}**`,
+            `PP: **${body.custom[0].pp_raw}**`,
+            `Play Count: **${body.custom[0].playcount}**`,
+            `Accuracy: **${body.custom[0].hit_accuracy}%**`,
+            `Time Played: **${body.custom[0].time_played}**`,
           ].join("\n");
 
           // send the user a message with the user stats
           return {
-            send: true,
+            send: false,
             result: string,
+			username: "Pippi",
+            avatar_url: "https://i.imgur.com/eRTuzdt.png"
           };
         } catch (e) {
-          this.sendBotMessage(e.message);
-          return
+			console.log(e)
+          return {
+            result: `${e}`,
+            username: "Pippi",
+            avatar_url: "https://i.imgur.com/eRTuzdt.png",
+          };
         }
       },
     });
   }
 
-  pluginWillUnload() {
-    powercord.api.commands.unregisterCommand("osu");
-  }
+  pluginWillUnload() {powercord.api.commands.unregisterCommand("osu");}
 };
